@@ -1,0 +1,83 @@
+package digital.vasic.asinka.sync
+
+import digital.vasic.asinka.models.SyncableObject
+import digital.vasic.asinka.models.SyncableObjectData
+import digital.vasic.asinka.proto.ObjectUpdate
+import digital.vasic.asinka.proto.SyncMessage
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import java.util.concurrent.ConcurrentHashMap
+
+interface SyncManager {
+    suspend fun registerObject(obj: SyncableObject)
+    suspend fun unregisterObject(objectId: String)
+    suspend fun updateObject(objectId: String, fields: Map<String, Any?>)
+    suspend fun deleteObject(objectId: String)
+    fun getObject(objectId: String): SyncableObject?
+    fun observeObject(objectId: String): Flow<SyncableObject>
+    fun observeAllChanges(): Flow<SyncChange>
+    suspend fun processRemoteUpdate(update: ObjectUpdate)
+}
+
+sealed class SyncChange {
+    data class Updated(val obj: SyncableObject) : SyncChange()
+    data class Deleted(val objectId: String, val objectType: String) : SyncChange()
+}
+
+class DefaultSyncManager : SyncManager {
+    private val objects = ConcurrentHashMap<String, SyncableObject>()
+    private val objectFlows = ConcurrentHashMap<String, MutableSharedFlow<SyncableObject>>()
+    private val _changesFlow = MutableSharedFlow<SyncChange>()
+    private val changesFlow = _changesFlow.asSharedFlow()
+
+    override suspend fun registerObject(obj: SyncableObject) {
+        objects[obj.objectId] = obj
+        objectFlows.getOrPut(obj.objectId) { MutableSharedFlow() }.emit(obj)
+        _changesFlow.emit(SyncChange.Updated(obj))
+    }
+
+    override suspend fun unregisterObject(objectId: String) {
+        val obj = objects.remove(objectId)
+        if (obj != null) {
+            objectFlows.remove(objectId)
+            _changesFlow.emit(SyncChange.Deleted(objectId, obj.objectType))
+        }
+    }
+
+    override suspend fun updateObject(objectId: String, fields: Map<String, Any?>) {
+        val obj = objects[objectId] ?: return
+        obj.fromFieldMap(fields)
+        objectFlows[objectId]?.emit(obj)
+        _changesFlow.emit(SyncChange.Updated(obj))
+    }
+
+    override suspend fun deleteObject(objectId: String) {
+        unregisterObject(objectId)
+    }
+
+    override fun getObject(objectId: String): SyncableObject? {
+        return objects[objectId]
+    }
+
+    override fun observeObject(objectId: String): Flow<SyncableObject> {
+        return objectFlows.getOrPut(objectId) { MutableSharedFlow() }.asSharedFlow()
+    }
+
+    override fun observeAllChanges(): Flow<SyncChange> {
+        return changesFlow
+    }
+
+    override suspend fun processRemoteUpdate(update: ObjectUpdate) {
+        val existingObj = objects[update.objectId]
+
+        if (existingObj != null && existingObj.version >= update.version) {
+            return
+        }
+
+        val updatedObj = SyncableObjectData.fromProtoUpdate(update)
+        objects[update.objectId] = updatedObj
+        objectFlows.getOrPut(update.objectId) { MutableSharedFlow() }.emit(updatedObj)
+        _changesFlow.emit(SyncChange.Updated(updatedObj))
+    }
+}

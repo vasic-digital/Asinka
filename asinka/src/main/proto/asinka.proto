@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package digital.vasic.asinka.proto;
+
+option java_multiple_files = true;
+option java_package = "digital.vasic.asinka.proto";
+
+service AsinkaService {
+  rpc Handshake(HandshakeRequest) returns (HandshakeResponse);
+  rpc SyncObjects(stream SyncMessage) returns (stream SyncMessage);
+  rpc SendEvent(EventMessage) returns (EventResponse);
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+}
+
+message HandshakeRequest {
+  string app_id = 1;
+  string app_name = 2;
+  string app_version = 3;
+  string device_id = 4;
+  bytes public_key = 5;
+  repeated string supported_protocols = 6;
+  repeated ObjectSchema exposed_schemas = 7;
+  map<string, string> capabilities = 8;
+}
+
+message HandshakeResponse {
+  bool success = 1;
+  string session_id = 2;
+  bytes public_key = 3;
+  repeated ObjectSchema exposed_schemas = 4;
+  map<string, string> capabilities = 5;
+  string error_message = 6;
+}
+
+message ObjectSchema {
+  string object_type = 1;
+  string version = 2;
+  repeated FieldSchema fields = 3;
+  repeated string permissions = 4;
+}
+
+message FieldSchema {
+  string name = 1;
+  string type = 2;
+  bool nullable = 3;
+}
+
+message SyncMessage {
+  oneof message_type {
+    ObjectUpdate update = 1;
+    ObjectDelete delete = 2;
+    ObjectQuery query = 3;
+    ObjectResponse response = 4;
+  }
+}
+
+message ObjectUpdate {
+  string object_id = 1;
+  string object_type = 2;
+  int64 timestamp = 3;
+  int32 version = 4;
+  map<string, FieldValue> fields = 5;
+  string session_id = 6;
+}
+
+message ObjectDelete {
+  string object_id = 1;
+  string object_type = 2;
+  int64 timestamp = 3;
+  string session_id = 4;
+}
+
+message ObjectQuery {
+  string query_id = 1;
+  string object_type = 2;
+  repeated QueryFilter filters = 3;
+  string session_id = 4;
+}
+
+message QueryFilter {
+  string field_name = 1;
+  string operator = 2;
+  FieldValue value = 3;
+}
+
+message ObjectResponse {
+  string query_id = 1;
+  repeated ObjectUpdate objects = 2;
+  bool has_more = 3;
+}
+
+message FieldValue {
+  oneof value {
+    string string_value = 1;
+    int64 int_value = 2;
+    double double_value = 3;
+    bool bool_value = 4;
+    bytes bytes_value = 5;
+  }
+}
+
+message EventMessage {
+  string event_id = 1;
+  string event_type = 2;
+  int64 timestamp = 3;
+  map<string, FieldValue> data = 4;
+  string session_id = 5;
+  int32 priority = 6;
+}
+
+message EventResponse {
+  bool success = 1;
+  string event_id = 2;
+  string error_message = 3;
+}
+
+message HeartbeatRequest {
+  string session_id = 1;
+  int64 timestamp = 2;
+}
+
+message HeartbeatResponse {
+  bool success = 1;
+  int64 server_timestamp = 2;
+}
