@@ -81,6 +81,7 @@ protobuf {
                 id("grpckt")
             }
             task.builtins {
+                id("java")
                 id("kotlin")
             }
         }
@@ -101,9 +102,10 @@ dependencies {
     // gRPC
     implementation("io.grpc:grpc-kotlin-stub:1.4.1")
     implementation("io.grpc:grpc-okhttp:1.60.1")
-    implementation("io.grpc:grpc-protobuf-lite:1.60.1")
+    implementation("io.grpc:grpc-protobuf:1.60.1")
     implementation("io.grpc:grpc-stub:1.60.1")
-    implementation("com.google.protobuf:protobuf-kotlin-lite:3.25.1")
+    implementation("com.google.protobuf:protobuf-java:3.25.1")
+    implementation("com.google.protobuf:protobuf-kotlin:3.25.1")
     implementation("javax.annotation:javax.annotation-api:1.3.2")
 
     // Room Database
@@ -113,7 +115,7 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
 
     // SQLCipher
-    implementation("net.zetetic:android-database-sqlcipher:4.10.0@aar")
+    implementation("net.zetetic:sqlcipher-android:4.10.0@aar")
 
     // Network Service Discovery
     implementation("com.google.android.gms:play-services-nearby:19.3.0")

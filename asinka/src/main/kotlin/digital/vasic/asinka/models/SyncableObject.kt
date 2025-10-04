@@ -55,14 +55,14 @@ data class SyncableObjectData(
         fun fromProtoUpdate(update: ObjectUpdate): SyncableObjectData {
             val fields = update.fieldsMap.mapValues { (_, fieldValue) ->
                 when {
-                    fieldValue.hasStringValue() -> fieldValue.stringValue
-                    fieldValue.hasIntValue() -> fieldValue.intValue
-                    fieldValue.hasDoubleValue() -> fieldValue.doubleValue
-                    fieldValue.hasBoolValue() -> fieldValue.boolValue
-                    fieldValue.hasBytesValue() -> fieldValue.bytesValue.toByteArray()
+                    fieldValue.hasStringValue() -> fieldValue.stringValue as Any?
+                    fieldValue.hasIntValue() -> fieldValue.intValue as Any?
+                    fieldValue.hasDoubleValue() -> fieldValue.doubleValue as Any?
+                    fieldValue.hasBoolValue() -> fieldValue.boolValue as Any?
+                    fieldValue.hasBytesValue() -> fieldValue.bytesValue.toByteArray() as Any?
                     else -> null
                 }
-            }.toMutableMap()
+            }.toMutableMap() as MutableMap<String, Any?>
 
             return SyncableObjectData(
                 objectId = update.objectId,

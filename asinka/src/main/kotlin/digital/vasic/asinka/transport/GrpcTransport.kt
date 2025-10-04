@@ -10,8 +10,8 @@ import digital.vasic.asinka.proto.HeartbeatResponse
 import digital.vasic.asinka.proto.SyncMessage
 import io.grpc.ManagedChannel
 import io.grpc.Server
-import io.grpc.netty.NettyChannelBuilder
-import io.grpc.netty.NettyServerBuilder
+import io.grpc.okhttp.OkHttpChannelBuilder
+import io.grpc.ServerBuilder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -51,12 +51,9 @@ class GrpcTransport(
     private val clients = mutableMapOf<String, GrpcTransportClient>()
 
     override suspend fun startServer(port: Int) {
-        server = NettyServerBuilder.forPort(port)
+        server = ServerBuilder.forPort(port)
             .addService(serviceImpl)
             .maxInboundMessageSize(config.maxMessageSize)
-            .keepAliveTime(config.keepAliveTime, TimeUnit.SECONDS)
-            .keepAliveTimeout(config.keepAliveTimeout, TimeUnit.SECONDS)
-            .permitKeepAliveWithoutCalls(config.keepAliveWithoutCalls)
             .build()
             .start()
     }
@@ -71,13 +68,10 @@ class GrpcTransport(
         val clientId = "$host:$port"
 
         return clients.getOrPut(clientId) {
-            val channel = NettyChannelBuilder
+            val channel = OkHttpChannelBuilder
                 .forAddress(host, port)
                 .usePlaintext()
                 .maxInboundMessageSize(config.maxMessageSize)
-                .keepAliveTime(config.keepAliveTime, TimeUnit.SECONDS)
-                .keepAliveTimeout(config.keepAliveTimeout, TimeUnit.SECONDS)
-                .keepAliveWithoutCalls(config.keepAliveWithoutCalls)
                 .idleTimeout(config.idleTimeout, TimeUnit.SECONDS)
                 .build()
 
