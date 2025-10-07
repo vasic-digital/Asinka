@@ -17,11 +17,12 @@ if (envFile.exists()) {
 }
 
 android {
+
     namespace = "digital.vasic.asinka"
     compileSdk = 35
-
     defaultConfig {
-        minSdk = 26
+
+        minSdk = 21
         targetSdk = 35
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -30,8 +31,11 @@ android {
 
     buildTypes {
         release {
+
             isMinifyEnabled = false
+
             proguardFiles(
+
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
@@ -39,13 +43,17 @@ android {
     }
 
     compileOptions {
+
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
+
         jvmTarget = "17"
+
         freeCompilerArgs += listOf(
+
             "-opt-in=kotlin.RequiresOptIn",
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
         )
