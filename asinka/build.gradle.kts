@@ -117,7 +117,7 @@ dependencies {
     implementation("javax.annotation:javax.annotation-api:1.3.2")
 
     // Room Database
-    val roomVersion = "2.8.0"
+    val roomVersion = "2.8.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
