@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.launch
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -109,7 +110,7 @@ class SyncManagerTest {
             version = 1
         )
 
-        kotlinx.coroutines.launch {
+        launch {
             syncManager.observeAllChanges().take(2).toList(changesList)
         }
 

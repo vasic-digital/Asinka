@@ -8,10 +8,11 @@ import digital.vasic.asinka.proto.HandshakeResponse
 import digital.vasic.asinka.proto.HeartbeatRequest
 import digital.vasic.asinka.proto.HeartbeatResponse
 import digital.vasic.asinka.proto.SyncMessage
+import io.grpc.Grpc
+import io.grpc.InsecureServerCredentials
 import io.grpc.ManagedChannel
 import io.grpc.Server
 import io.grpc.okhttp.OkHttpChannelBuilder
-import io.grpc.ServerBuilder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -51,7 +52,7 @@ class GrpcTransport(
     private val clients = mutableMapOf<String, GrpcTransportClient>()
 
     override suspend fun startServer(port: Int) {
-        server = ServerBuilder.forPort(port)
+        server = Grpc.newServerBuilderForPort(port, InsecureServerCredentials.create())
             .addService(serviceImpl)
             .maxInboundMessageSize(config.maxMessageSize)
             .build()

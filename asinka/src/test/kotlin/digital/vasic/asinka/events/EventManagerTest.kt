@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.launch
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -35,7 +36,7 @@ class EventManagerTest {
     fun testObserveEvents() = runTest {
         val events = mutableListOf<AsinkaEvent>()
 
-        kotlinx.coroutines.launch {
+        launch {
             eventManager.observeEvents().take(2).toList(events)
         }
 
@@ -61,7 +62,7 @@ class EventManagerTest {
     fun testObserveEventsByType() = runTest {
         val events = mutableListOf<AsinkaEvent>()
 
-        kotlinx.coroutines.launch {
+        launch {
             eventManager.observeEvents("specific-type").take(1).toList(events)
         }
 
