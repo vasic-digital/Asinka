@@ -154,10 +154,15 @@ asinka.discoveryManager.startDiscovery()
 
 ## Testing
 
-Asinka includes **101 comprehensive tests** providing **100% coverage** of core functionality:
+Asinka includes **106 comprehensive tests** providing **100% coverage** of core functionality:
 
 - **89 Unit Tests**: SecurityManager, Discovery, Handshake, Sync, Events, Transport, Client API
-- **12 Instrumentation Tests**: Full integration testing on real Android devices
+- **17 Instrumentation Tests**: Full integration testing on real Android devices including:
+  - Multi-app synchronization scenarios
+  - Real-time sync validation
+  - Object lifecycle management
+  - Performance validation under load
+  - Inter-app communication verification
 
 ```bash
 # Run unit tests

@@ -31,22 +31,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Unit tests (89 tests)
 ./gradlew test
 
-# Instrumentation tests (12 tests)
+# Instrumentation tests (17 tests including sync automation tests)
 ./gradlew connectedAndroidTest
 
-# All tests with report generation (101 total)
+# All tests with report generation (106 total)
 ./scripts/run_all_tests.sh
 ```
 
 Test reports are written to: `Tests/` directory in project root.
 
-**Test Coverage**: 100% of core library functionality with 101 comprehensive tests covering:
+**Test Coverage**: 100% of core library functionality with 106 comprehensive tests covering:
 - Security and encryption
 - Discovery and handshake
-- Transport and sync
+- Transport and sync mechanisms
 - Events and receivers
 - Main client API
 - Integration scenarios
+- Multi-app synchronization scenarios
+- Real-time sync validation
+- Object lifecycle management
+- Performance validation under load
 
 ### Distribution
 ```bash
