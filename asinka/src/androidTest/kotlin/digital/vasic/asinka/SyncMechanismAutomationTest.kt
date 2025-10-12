@@ -75,6 +75,7 @@ class SyncMechanismAutomationTest {
             appName = "Sync Test Server",
             appVersion = "1.0.0",
             serverPort = serverPort,
+            serviceName = "sync-test",
             exposedSchemas = listOf(userSchema, documentSchema),
             capabilities = mapOf(
                 "sync" to "enabled",
@@ -88,6 +89,7 @@ class SyncMechanismAutomationTest {
             appName = "Sync Test Client",
             appVersion = "1.0.0",
             serverPort = serverPort + 1,
+            serviceName = "sync-test",
             exposedSchemas = listOf(userSchema, documentSchema),
             capabilities = mapOf(
                 "sync" to "enabled",

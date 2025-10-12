@@ -41,6 +41,7 @@ class MainActivity : ComponentActivity() {
             appName = "Asinka Demo",
             appVersion = "1.0.0",
             serverPort = 8888,
+            serviceName = "demo-sync",
             exposedSchemas = listOf(
                 ObjectSchema(
                     objectType = "Task",

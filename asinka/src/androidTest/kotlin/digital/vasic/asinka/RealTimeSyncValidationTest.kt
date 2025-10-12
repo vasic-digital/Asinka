@@ -75,6 +75,7 @@ class RealTimeSyncValidationTest {
             appName = "RealTime Primary",
             appVersion = "1.0.0",
             serverPort = basePort,
+            serviceName = "realtime-sync",
             exposedSchemas = listOf(chatMessageSchema, liveDocumentSchema),
             capabilities = mapOf(
                 "sync" to "enabled",
@@ -88,6 +89,7 @@ class RealTimeSyncValidationTest {
             appName = "RealTime Secondary",
             appVersion = "1.0.0",
             serverPort = basePort + 1,
+            serviceName = "realtime-sync",
             exposedSchemas = listOf(chatMessageSchema, liveDocumentSchema),
             capabilities = mapOf(
                 "sync" to "enabled",

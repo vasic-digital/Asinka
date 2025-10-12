@@ -42,6 +42,7 @@ class AsinkaClientTest {
             appVersion = "1.0.0",
             deviceId = "test-device-123",
             serverPort = 9999,
+            serviceName = "test-sync",
             exposedSchemas = schemas,
             capabilities = mapOf("sync" to "enabled", "events" to "enabled")
         )

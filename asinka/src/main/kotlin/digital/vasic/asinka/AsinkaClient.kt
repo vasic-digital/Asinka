@@ -38,6 +38,7 @@ data class AsinkaConfig(
     val appVersion: String,
     val deviceId: String = UUID.randomUUID().toString(),
     val serverPort: Int = 8888,
+    val serviceName: String = "default-sync",
     val exposedSchemas: List<ObjectSchema> = emptyList(),
     val capabilities: Map<String, String> = emptyMap(),
     val transportConfig: TransportConfig = TransportConfig()
@@ -71,6 +72,44 @@ class AsinkaClient private constructor(
         isStarted = true
 
         transport.startServer(config.serverPort)
+
+        // Start advertising this service
+        scope.launch {
+            discoveryManager.startAdvertising(config.serviceName, config.serverPort).collect { state ->
+                when (state) {
+                    is digital.vasic.asinka.discovery.AdvertisingState.Advertising -> {
+                        // Successfully advertising
+                    }
+                    is digital.vasic.asinka.discovery.AdvertisingState.Error -> {
+                        // Handle advertising error
+                    }
+                    else -> {}
+                }
+            }
+        }
+
+        // Start discovery of other services
+        scope.launch {
+            discoveryManager.startDiscovery().collect { event ->
+                when (event) {
+                    is digital.vasic.asinka.discovery.DiscoveryEvent.ServiceFound -> {
+                        val service = event.serviceInfo
+                        // Only connect to services of the same type, not our own
+                        if (service.serviceName.contains(config.serviceName) && !service.serviceName.contains(config.appId)) {
+                            try {
+                                connect(service.host, service.port)
+                            } catch (e: Exception) {
+                                // Handle connection error
+                            }
+                        }
+                    }
+                    is digital.vasic.asinka.discovery.DiscoveryEvent.ServiceLost -> {
+                        // Handle service lost
+                    }
+                    else -> {}
+                }
+            }
+        }
 
         scope.launch {
             syncManager.observeAllChanges().collect { change ->

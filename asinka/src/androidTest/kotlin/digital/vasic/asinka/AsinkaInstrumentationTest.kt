@@ -32,6 +32,7 @@ class AsinkaInstrumentationTest {
             appName = "Asinka Test",
             appVersion = "1.0.0",
             serverPort = 9876,
+            serviceName = "test-sync",
             exposedSchemas = listOf(
                 ObjectSchema(
                     objectType = "TestObject",

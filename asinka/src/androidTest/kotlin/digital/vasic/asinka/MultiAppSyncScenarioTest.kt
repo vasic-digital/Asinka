@@ -76,6 +76,7 @@ class MultiAppSyncScenarioTest {
             appName = "Multi-App Server",
             appVersion = "1.0.0",
             serverPort = basePort,
+            serviceName = "multi-sync",
             exposedSchemas = listOf(sharedDataSchema, teamTaskSchema),
             capabilities = mapOf(
                 "sync" to "enabled",
@@ -90,6 +91,7 @@ class MultiAppSyncScenarioTest {
             appName = "Multi-App Client 1",
             appVersion = "1.0.0",
             serverPort = basePort + 1,
+            serviceName = "multi-sync",
             exposedSchemas = listOf(sharedDataSchema, teamTaskSchema),
             capabilities = mapOf("sync" to "enabled", "broadcast" to "enabled")
         )
@@ -99,6 +101,7 @@ class MultiAppSyncScenarioTest {
             appName = "Multi-App Client 2",
             appVersion = "1.0.0",
             serverPort = basePort + 2,
+            serviceName = "multi-sync",
             exposedSchemas = listOf(sharedDataSchema, teamTaskSchema),
             capabilities = mapOf("sync" to "enabled", "broadcast" to "enabled")
         )
@@ -108,6 +111,7 @@ class MultiAppSyncScenarioTest {
             appName = "Multi-App Client 3",
             appVersion = "1.0.0",
             serverPort = basePort + 3,
+            serviceName = "multi-sync",
             exposedSchemas = listOf(sharedDataSchema, teamTaskSchema),
             capabilities = mapOf("sync" to "enabled", "broadcast" to "enabled")
         )
