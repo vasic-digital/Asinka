@@ -123,6 +123,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-process:2.9.4")
 
     // gRPC
+    implementation("io.grpc:grpc-core:1.60.1")
     implementation("io.grpc:grpc-kotlin-stub:1.4.1")
     implementation("io.grpc:grpc-okhttp:1.60.1")
     implementation("io.grpc:grpc-protobuf:1.60.1")
