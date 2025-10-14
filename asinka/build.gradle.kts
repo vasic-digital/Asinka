@@ -91,7 +91,7 @@ protobuf {
     }
     plugins {
         id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.60.1"
+            artifact = "io.grpc:protoc-gen-grpc-java:1.57.1"
         }
         id("grpckt") {
             artifact = "io.grpc:protoc-gen-grpc-kotlin:1.4.1:jdk8@jar"
@@ -123,11 +123,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-process:2.9.4")
 
     // gRPC
-    implementation("io.grpc:grpc-core:1.60.1")
+    implementation("io.grpc:grpc-core:1.57.1")
     implementation("io.grpc:grpc-kotlin-stub:1.4.1")
-    implementation("io.grpc:grpc-okhttp:1.60.1")
-    implementation("io.grpc:grpc-protobuf:1.60.1")
-    implementation("io.grpc:grpc-stub:1.60.1")
+    implementation("io.grpc:grpc-netty-shaded:1.57.1")
+    implementation("io.grpc:grpc-protobuf:1.57.1")
+    implementation("io.grpc:grpc-stub:1.57.1")
     implementation("com.google.protobuf:protobuf-java:3.25.1")
     implementation("com.google.protobuf:protobuf-kotlin:3.25.1")
     implementation("javax.annotation:javax.annotation-api:1.3.2")

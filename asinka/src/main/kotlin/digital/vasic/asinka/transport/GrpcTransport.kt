@@ -12,7 +12,8 @@ import io.grpc.Grpc
 import io.grpc.InsecureServerCredentials
 import io.grpc.ManagedChannel
 import io.grpc.Server
-import io.grpc.okhttp.OkHttpChannelBuilder
+import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder
+import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -52,7 +53,7 @@ class GrpcTransport(
     private val clients = mutableMapOf<String, GrpcTransportClient>()
 
     override suspend fun startServer(port: Int) {
-        server = Grpc.newServerBuilderForPort(port, InsecureServerCredentials.create())
+        server = NettyServerBuilder.forPort(port)
             .addService(serviceImpl)
             .maxInboundMessageSize(config.maxMessageSize)
             .build()
@@ -69,7 +70,7 @@ class GrpcTransport(
         val clientId = "$host:$port"
 
         return clients.getOrPut(clientId) {
-            val channel = OkHttpChannelBuilder
+            val channel = ManagedChannelBuilder
                 .forAddress(host, port)
                 .usePlaintext()
                 .maxInboundMessageSize(config.maxMessageSize)
