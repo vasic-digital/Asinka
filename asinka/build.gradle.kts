@@ -49,11 +49,9 @@ android {
     }
 
     kotlinOptions {
-
         jvmTarget = "17"
 
         freeCompilerArgs += listOf(
-
             "-opt-in=kotlin.RequiresOptIn",
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
         )
@@ -111,9 +109,21 @@ protobuf {
     }
 }
 
+// Force Kotlin version to avoid conflicts
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-common:2.0.0")
+    }
+}
+
 dependencies {
-    // Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.0")
+    // Kotlin - Force specific versions to avoid conflicts
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
@@ -133,10 +143,21 @@ dependencies {
     implementation("javax.annotation:javax.annotation-api:1.3.2")
 
     // Room Database
-    val roomVersion = "2.8.1"
+    val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+
+// Force Kotlin version for KSP to avoid conflicts
+configurations.matching { it.name.startsWith("ksp") }.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-common:2.0.0")
+    }
+}
 
     // SQLCipher
     implementation("net.zetetic:sqlcipher-android:4.10.0@aar")
