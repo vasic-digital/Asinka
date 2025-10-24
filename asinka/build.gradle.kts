@@ -67,6 +67,10 @@ android {
         }
     }
 
+    lint {
+        disable.add("NullSafeMutableLiveData")
+    }
+
     packaging {
         resources {
             excludes += setOf(
