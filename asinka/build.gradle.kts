@@ -134,7 +134,7 @@ dependencies {
 
     // gRPC
     implementation("io.grpc:grpc-core:1.57.1")
-    implementation("io.grpc:grpc-kotlin-stub:1.4.1")
+    implementation("io.grpc:grpc-kotlin-stub:1.4.0")
     implementation("io.grpc:grpc-netty-shaded:1.57.1")
     implementation("io.grpc:grpc-protobuf:1.57.1")
     implementation("io.grpc:grpc-stub:1.57.1")
